@@ -11,14 +11,34 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+        }
+        body::before {
+            content: "AV © Onestepforthelife";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 80px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            user-select: none;
         }
         .wizard-container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 40px 60px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        @media (max-width: 768px) {
+            .wizard-container {
+                padding: 30px 20px;
+            }
         }
         .progress-bar {
             display: flex;
@@ -195,7 +215,10 @@
 <body>
     <div class="wizard-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <a href="social-optimizer-index.html" style="color: #667eea; text-decoration: none; font-weight: bold;">← Back to Home</a>
+            <div>
+                <a href="social-optimizer-index.html" style="color: #667eea; text-decoration: none; font-weight: bold; margin-right: 15px;">← SPO Home</a>
+                <a href="library.html" style="color: #999; text-decoration: none; font-size: 0.9em;">Ideas Before Time</a>
+            </div>
             <button onclick="showSupport()" style="background: #28a745; color: white; padding: 8px 15px; border: none; border-radius: 20px; cursor: pointer; font-size: 0.9em;">💬 Need Help?</button>
         </div>
         
@@ -213,10 +236,16 @@
             <label>Select Platform *</label>
             <select id="platform">
                 <option value="">Choose platform...</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="facebook">Facebook/Meta</option>
-                <option value="instagram">Instagram</option>
-                <option value="twitter">Twitter/X</option>
+                <option value="linkedin">💼 LinkedIn</option>
+                <option value="facebook">📘 Facebook/Meta</option>
+                <option value="instagram">📸 Instagram</option>
+                <option value="twitter">🐦 Twitter/X</option>
+                <option value="youtube">🎥 YouTube</option>
+                <option value="tiktok">🎵 TikTok</option>
+                <option value="pinterest">📌 Pinterest</option>
+                <option value="threads">🧵 Threads</option>
+                <option value="whatsapp">💬 WhatsApp Business</option>
+                <option value="snapchat">👻 Snapchat</option>
             </select>
 
             <label>How would you like to provide your profile?</label>
@@ -292,13 +321,25 @@
                     <div style="font-size: 2em;">⭐</div>
                     <div>Influencer</div>
                 </div>
-                <div class="option-card" data-value="ngo">
-                    <div style="font-size: 2em;">🤝</div>
-                    <div>NGO Leader</div>
+                <div class="option-card" data-value="creator">
+                    <div style="font-size: 2em;">🎬</div>
+                    <div>Content Creator</div>
                 </div>
                 <div class="option-card" data-value="entrepreneur">
                     <div style="font-size: 2em;">🚀</div>
                     <div>Entrepreneur</div>
+                </div>
+                <div class="option-card" data-value="artist">
+                    <div style="font-size: 2em;">🎨</div>
+                    <div>Artist/Designer</div>
+                </div>
+                <div class="option-card" data-value="coach">
+                    <div style="font-size: 2em;">🎯</div>
+                    <div>Coach/Consultant</div>
+                </div>
+                <div class="option-card" data-value="ngo">
+                    <div style="font-size: 2em;">🤝</div>
+                    <div>NGO Leader</div>
                 </div>
                 <div class="option-card" data-value="speaker">
                     <div style="font-size: 2em;">🎤</div>
@@ -308,20 +349,25 @@
 
             <label>Select Tone/Style *</label>
             <div class="option-grid" id="toneOptions">
-                <div class="option-card" data-value="formal">Formal</div>
-                <div class="option-card" data-value="friendly">Friendly</div>
-                <div class="option-card" data-value="inspirational">Inspirational</div>
-                <div class="option-card" data-value="analytical">Analytical</div>
-                <div class="option-card" data-value="viral">Viral</div>
+                <div class="option-card" data-value="formal">📋 Formal</div>
+                <div class="option-card" data-value="friendly">😊 Friendly</div>
+                <div class="option-card" data-value="inspirational">✨ Inspirational</div>
+                <div class="option-card" data-value="analytical">📊 Analytical</div>
+                <div class="option-card" data-value="viral">🔥 Viral</div>
+                <div class="option-card" data-value="casual">🎉 Casual/Fun</div>
+                <div class="option-card" data-value="educational">📚 Educational</div>
             </div>
 
             <label>Primary Goal *</label>
             <div class="option-grid" id="goalOptions">
-                <div class="option-card" data-value="hired">Get Hired</div>
-                <div class="option-card" data-value="followers">Build Followers</div>
-                <div class="option-card" data-value="sales">Sell Products</div>
-                <div class="option-card" data-value="cause">Promote Cause</div>
-                <div class="option-card" data-value="thought">Thought Leadership</div>
+                <div class="option-card" data-value="hired">💼 Get Hired</div>
+                <div class="option-card" data-value="followers">👥 Build Followers</div>
+                <div class="option-card" data-value="viral">🚀 Go Viral</div>
+                <div class="option-card" data-value="sales">💰 Sell Products</div>
+                <div class="option-card" data-value="community">🤝 Build Community</div>
+                <div class="option-card" data-value="monetize">💵 Monetize Content</div>
+                <div class="option-card" data-value="cause">❤️ Promote Cause</div>
+                <div class="option-card" data-value="thought">🧠 Thought Leadership</div>
             </div>
 
             <label>Keywords/Industry Focus (comma-separated)</label>
@@ -375,6 +421,28 @@
                 <button class="btn-primary" onclick="downloadProfile()">📥 Download as Text File</button>
                 <button class="btn-secondary" onclick="location.href='social-optimizer-dashboard.html'">View Dashboard</button>
             </div>
+
+            <!-- Feedback Section -->
+            <div style="margin-top: 40px; padding: 30px; background: #f8f9ff; border-radius: 15px; border-left: 4px solid #667eea;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">💬 Share Your Feedback (Optional)</h3>
+                <p style="color: #666; margin-bottom: 20px; font-size: 0.95em;">
+                    Help us improve! Share your thoughts about the optimization quality, suggestions, or how you plan to use it.
+                </p>
+                <textarea id="userFeedback" placeholder="Your feedback here... (Optional)" 
+                    style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #e0e0e0; 
+                           border-radius: 8px; font-family: inherit; font-size: 1em; resize: vertical;"></textarea>
+                <div id="feedbackWarning" style="color: #dc3545; font-size: 0.9em; margin-top: 10px; display: none;">
+                    ⚠️ Please keep your feedback professional and appropriate.
+                </div>
+                <button onclick="submitFeedback()" 
+                    style="margin-top: 15px; background: #28a745; color: white; padding: 12px 30px; 
+                           border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em;">
+                    📤 Submit Feedback
+                </button>
+                <div id="feedbackSuccess" style="color: #28a745; font-weight: bold; margin-top: 15px; display: none;">
+                    ✅ Thank you for your feedback!
+                </div>
+            </div>
         </div>
     </div>
 
@@ -383,6 +451,10 @@
         🔧 Need Developer Mode?
     </div>
 
+    <!-- Google Analytics 4 - Universal + SPO Tracking -->
+    <script src="universal-analytics.js"></script>
+    <script src="social-optimizer-analytics.js"></script>
+    
     <!-- Payment Gateways -->
     <script src="https://js.stripe.com/v3/"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

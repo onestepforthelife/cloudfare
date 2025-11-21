@@ -3,7 +3,7 @@
 
 const PRICING = {
     // India - Special pricing
-    IN: { currency: 'INR', symbol: '₹', amount: 11, amountInPaise: 1100, name: 'Indian Rupee' },
+    IN: { currency: 'INR', symbol: '₹', amount: 21, amountInPaise: 2100, name: 'Indian Rupee' },
     
     // USA
     US: { currency: 'USD', symbol: '$', amount: 1, amountInCents: 100, name: 'US Dollar' },
@@ -118,7 +118,7 @@ function updatePricesOnPage(pricing) {
 function getRazorpayAmount(pricing) {
     // Razorpay uses smallest currency unit
     if (pricing.currency === 'INR') {
-        return pricing.amountInPaise; // 1100 paise = ₹11
+        return pricing.amountInPaise; // 2100 paise = ₹21
     } else if (pricing.currency === 'USD') {
         return pricing.amountInCents; // 100 cents = $1
     } else if (pricing.currency === 'EUR') {

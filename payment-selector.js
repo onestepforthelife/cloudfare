@@ -122,6 +122,13 @@ const PaymentGateway = {
     processPayment(gateway) {
         console.log('Processing payment via:', gateway);
         
+        // Track analytics
+        const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 21, currency: 'INR' };
+        if (window.Analytics) {
+            Analytics.trackPaymentInitiated(userData, pricing);
+            Analytics.trackPaymentMethodSelected(gateway, pricing);
+        }
+        
         switch(gateway) {
             case 'upi':
                 this.processUPI();
@@ -241,6 +248,12 @@ const PaymentGateway = {
                 // Log payment
                 logPayment('UPI_' + transactionId);
                 
+                // Track analytics
+                const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 21, currency: 'INR' };
+                if (window.Analytics) {
+                    Analytics.trackPaymentCompleted('UPI_' + transactionId, userData, pricing, 'UPI');
+                }
+                
                 alert('✅ Payment Verified!\n\nTransaction ID: ' + transactionId + '\n\nYour profile is now unlocked!');
             }, 2000);
         } else {
@@ -276,6 +289,11 @@ const PaymentGateway = {
                 isPaid = true;
                 showSuccess();
                 logPayment(response.razorpay_payment_id);
+                
+                // Track analytics
+                if (window.Analytics) {
+                    Analytics.trackPaymentCompleted(response.razorpay_payment_id, userData, pricing, 'Razorpay');
+                }
             },
             prefill: { name: '', email: '', contact: '' },
             theme: { color: '#667eea' }

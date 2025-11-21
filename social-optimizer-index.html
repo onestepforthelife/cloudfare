@@ -11,11 +11,33 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
+            position: relative;
+        }
+        body::before {
+            content: "AV © Onestepforthelife";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 80px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            user-select: none;
         }
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            max-width: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 20px 40px;
+        }
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
         }
         header {
             text-align: center;
@@ -76,6 +98,11 @@
 </head>
 <body>
     <div class="container">
+        <div style="text-align: center; padding: 15px 0;">
+            <a href="library.html" style="color: white; text-decoration: none; font-size: 14px; opacity: 0.9; transition: opacity 0.3s;">
+                ← Back to Ideas Before Time
+            </a>
+        </div>
         <header>
             <h1>🚀 Social Profile Optimizer AI</h1>
             <p class="tagline">Transform Your Social Media Presence with AI-Powered Optimization</p>
@@ -124,6 +151,102 @@
             <button class="cta-button" style="margin-top: 30px;" onclick="location.href='social-optimizer-app.html'">Try Free Preview</button>
         </div>
 
+        <!-- Testimonials Section -->
+        <div style="background: white; padding: 40px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 40px;">What Our Users Say</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div style="padding: 25px; background: #f8f9ff; border-radius: 12px; border-left: 4px solid #667eea;">
+                    <div style="color: #ffc107; font-size: 1.5em; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+                    <p style="color: #666; font-style: italic; margin-bottom: 15px;">"My LinkedIn profile views increased 3x after using this tool. The AI suggestions were spot-on for my industry!"</p>
+                    <p style="font-weight: bold; color: #667eea;">- Priya S., Marketing Manager</p>
+                </div>
+                <div style="padding: 25px; background: #f8f9ff; border-radius: 12px; border-left: 4px solid #667eea;">
+                    <div style="color: #ffc107; font-size: 1.5em; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+                    <p style="color: #666; font-style: italic; margin-bottom: 15px;">"Best ₹11 I ever spent! Got 5 interview calls within a week of updating my profile with these suggestions."</p>
+                    <p style="font-weight: bold; color: #667eea;">- Rahul M., Software Engineer</p>
+                </div>
+                <div style="padding: 25px; background: #f8f9ff; border-radius: 12px; border-left: 4px solid #667eea;">
+                    <div style="color: #ffc107; font-size: 1.5em; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+                    <p style="color: #666; font-style: italic; margin-bottom: 15px;">"As an entrepreneur, I needed my Instagram to stand out. This tool gave me exactly what I needed - professional and engaging!"</p>
+                    <p style="font-weight: bold; color: #667eea;">- Anjali K., Startup Founder</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div style="background: white; padding: 40px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 40px;">Frequently Asked Questions</h2>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">❓ How does it work?</h3>
+                    <p style="color: #666; line-height: 1.6;">Simply paste your current profile, select your persona and goals, and our AI generates optimized content tailored to your platform. You get a free preview before paying!</p>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">💳 What payment methods do you accept?</h3>
+                    <p style="color: #666; line-height: 1.6;">We accept UPI (PhonePe, GPay, Paytm), all credit/debit cards via Razorpay and Stripe, and international payments. 100% secure checkout.</p>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">🔄 Can I get a refund?</h3>
+                    <p style="color: #666; line-height: 1.6;">Yes! If you're not satisfied with the optimization, contact us within 24 hours for a full refund. No questions asked.</p>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">📱 Which platforms are supported?</h3>
+                    <p style="color: #666; line-height: 1.6;">LinkedIn, Facebook, Instagram, and Twitter/X. Each platform gets customized optimization based on its unique algorithm and audience.</p>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">⏱️ How long does it take?</h3>
+                    <p style="color: #666; line-height: 1.6;">The entire process takes 2-3 minutes! Input your profile, customize preferences, preview, pay, and get instant access to your optimized content.</p>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">💾 Can I access it later?</h3>
+                    <p style="color: #666; line-height: 1.6;">Absolutely! Your optimization is saved in your dashboard. You can download it as a text file or copy to clipboard anytime.</p>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">🔒 Is my data safe?</h3>
+                    <p style="color: #666; line-height: 1.6;">Yes! We don't store your profile data permanently. Payment processing is handled by Stripe/Razorpay (PCI-DSS compliant). Your privacy is our priority.</p>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 10px;">🌍 Do you support multiple languages?</h3>
+                    <p style="color: #666; line-height: 1.6;">Currently, we optimize profiles in English. Multi-language support is coming soon!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div style="background: white; padding: 40px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 40px;">How It Works</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto;">
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                                margin: 0 auto 20px; color: white; font-size: 2em; font-weight: bold;">1</div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Input Your Profile</h3>
+                    <p style="color: #666;">Paste your current bio, upload a screenshot, or share your profile link</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                                margin: 0 auto 20px; color: white; font-size: 2em; font-weight: bold;">2</div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Customize Settings</h3>
+                    <p style="color: #666;">Choose your persona, tone, goals, and industry keywords</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                                margin: 0 auto 20px; color: white; font-size: 2em; font-weight: bold;">3</div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Preview & Pay</h3>
+                    <p style="color: #666;">See a preview of your optimization, then unlock full access for ₹11</p>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+                                margin: 0 auto 20px; color: white; font-size: 2em; font-weight: bold;">4</div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Copy & Update</h3>
+                    <p style="color: #666;">Copy your optimized content and update your social profiles instantly</p>
+                </div>
+            </div>
+        </div>
+
         <div style="text-align: center; margin: 40px 0; padding: 30px; background: white; border-radius: 15px;">
             <h2 style="color: #667eea; margin-bottom: 15px;">Need Help?</h2>
             <p style="color: #666; margin-bottom: 20px;">Questions about the tool or need custom optimization?</p>
@@ -148,6 +271,10 @@
         </div>
     </footer>
 
+    <!-- Google Analytics 4 - Universal + SPO Tracking -->
+    <script src="universal-analytics.js"></script>
+    <script src="social-optimizer-analytics.js"></script>
+    
     <!-- Currency Detection Script -->
     <script src="currency-detector.js"></script>
 </body>

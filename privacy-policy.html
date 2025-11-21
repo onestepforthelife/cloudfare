@@ -28,14 +28,19 @@ body::before {
     user-select: none;
 }
 .container {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     background: white;
     border-radius: 15px;
-    padding: 40px;
+    padding: 40px 60px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     position: relative;
     z-index: 1;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 20px;
+    }
 }
 h1 {
     color: #667eea;
@@ -264,6 +269,9 @@ h1 {
         <a href="index.html" class="back-btn">← Back to Home</a>
     </div>
 </div>
+
+<!-- Google Analytics 4 - Universal Tracking -->
+<script src="universal-analytics.js"></script>
 
 </body>
 </html>

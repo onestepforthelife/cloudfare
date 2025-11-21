@@ -31,9 +31,18 @@ function setupOptionCards() {
                 
                 // Store selection
                 const value = this.getAttribute('data-value');
-                if (groupId === 'personaOptions') userData.persona = value;
-                if (groupId === 'toneOptions') userData.tone = value;
-                if (groupId === 'goalOptions') userData.goal = value;
+                if (groupId === 'personaOptions') {
+                    userData.persona = value;
+                    if (window.Analytics) Analytics.trackPersonaSelected(value);
+                }
+                if (groupId === 'toneOptions') {
+                    userData.tone = value;
+                    if (window.Analytics) Analytics.trackToneSelected(value);
+                }
+                if (groupId === 'goalOptions') {
+                    userData.goal = value;
+                    if (window.Analytics) Analytics.trackGoalSelected(value);
+                }
             });
         });
     });
@@ -83,6 +92,11 @@ function selectInputMethod(method) {
     
     // Clear validation messages
     document.getElementById('validationMessages').innerHTML = '';
+    
+    // Track analytics
+    if (window.Analytics) {
+        Analytics.trackInputMethod(method);
+    }
 }
 
 // Handle file uploads
@@ -204,6 +218,12 @@ function validateStep1() {
         userData.currentBio = `Extracted from ${inputMethod}: ${uploadedFile.name}`;
     }
     
+    // Track analytics
+    if (window.Analytics) {
+        Analytics.trackPlatformSelected(platform);
+        Analytics.trackStepCompleted(1, 'Input Information');
+    }
+    
     return true;
 }
 
@@ -234,6 +254,13 @@ function generatePreview() {
     
     // Display preview (blurred)
     displayPreview(true);
+    
+    // Track analytics
+    if (window.Analytics) {
+        Analytics.trackCombination(userData.platform, userData.persona, userData.tone, userData.goal);
+        Analytics.trackPreviewGenerated(userData);
+        Analytics.trackStepCompleted(2, 'Customization');
+    }
     
     // Move to step 3
     nextStep(3);
@@ -322,6 +349,7 @@ function copyToClipboard(text) {
     
     navigator.clipboard.writeText(text).then(() => {
         alert('✅ Copied to clipboard!');
+        if (window.Analytics) Analytics.trackCopyToClipboard('profile_content');
     }).catch(err => {
         console.error('Copy failed:', err);
         // Fallback
@@ -332,6 +360,7 @@ function copyToClipboard(text) {
         document.execCommand('copy');
         document.body.removeChild(textarea);
         alert('✅ Copied to clipboard!');
+        if (window.Analytics) Analytics.trackCopyToClipboard('profile_content');
     });
 }
 
@@ -596,7 +625,7 @@ function downloadProfile() {
     // Add watermark branding
     content += `\n${'='.repeat(50)}\n`;
     content += `✨ Optimized by Social Profile Optimizer AI\n`;
-    content += `AI-Powered Profile Optimization • Only ₹11\n`;
+    content += `AI-Powered Profile Optimization • Only ₹21\n`;
     content += `Get yours at: ProfileOptimizer.com\n`;
     content += `Email: onestepforthelife@gmail.com\n`;
     content += `${'='.repeat(50)}\n`;
@@ -611,6 +640,11 @@ function downloadProfile() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    
+    // Track analytics
+    if (window.Analytics) {
+        Analytics.trackProfileDownloaded(userData);
+    }
 }
 
 
@@ -702,4 +736,148 @@ Click OK to send an email.
             'Hi,\n\nI need help with:\n\n[Describe your issue here]\n\nPlatform: ' + (userData.platform || 'Not selected') + '\n\nThank you!'
         );
     }
+}
+
+// Content filter for inappropriate words
+function containsInappropriateContent(text) {
+    // List of prohibited words/patterns (basic filter)
+    const prohibitedWords = [
+        'fuck', 'shit', 'bitch', 'asshole', 'damn', 'crap', 'bastard',
+        'sex', 'porn', 'xxx', 'nude', 'naked', 'viagra', 'casino',
+        'scam', 'fraud', 'hack', 'crack', 'pirate', 'illegal',
+        'drug', 'cocaine', 'heroin', 'marijuana', 'weed',
+        'kill', 'murder', 'suicide', 'bomb', 'terrorist', 'weapon',
+        'hate', 'racist', 'nazi', 'hitler'
+    ];
+    
+    const lowerText = text.toLowerCase();
+    
+    // Check for prohibited words
+    for (let word of prohibitedWords) {
+        if (lowerText.includes(word)) {
+            return true;
+        }
+    }
+    
+    // Check for excessive caps (spam indicator)
+    const capsCount = (text.match(/[A-Z]/g) || []).length;
+    if (capsCount > text.length * 0.7 && text.length > 20) {
+        return true;
+    }
+    
+    // Check for excessive special characters (spam indicator)
+    const specialCount = (text.match(/[!@#$%^&*()]/g) || []).length;
+    if (specialCount > text.length * 0.3) {
+        return true;
+    }
+    
+    return false;
+}
+
+// Submit user feedback
+function submitFeedback() {
+    const feedbackText = document.getElementById('userFeedback').value.trim();
+    const warningDiv = document.getElementById('feedbackWarning');
+    const successDiv = document.getElementById('feedbackSuccess');
+    
+    // Reset messages
+    warningDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+    
+    // Check if empty
+    if (!feedbackText) {
+        alert('💡 Feedback is optional, but if you want to share, please write something!');
+        return;
+    }
+    
+    // Check length
+    if (feedbackText.length < 10) {
+        alert('💡 Please provide more detailed feedback (at least 10 characters).');
+        return;
+    }
+    
+    if (feedbackText.length > 1000) {
+        alert('💡 Feedback is too long. Please keep it under 1000 characters.');
+        return;
+    }
+    
+    // Check for inappropriate content
+    if (containsInappropriateContent(feedbackText)) {
+        warningDiv.style.display = 'block';
+        warningDiv.textContent = '⚠️ Please keep your feedback professional and appropriate. Inappropriate content detected.';
+        return;
+    }
+    
+    // Store feedback
+    const feedback = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        platform: userData.platform,
+        persona: userData.persona,
+        tone: userData.tone,
+        goal: userData.goal,
+        feedback: feedbackText,
+        rating: null // Can add star rating later
+    };
+    
+    // Save to localStorage
+    const allFeedback = JSON.parse(localStorage.getItem('userFeedback') || '[]');
+    allFeedback.unshift(feedback);
+    
+    // Keep only last 100 feedbacks
+    if (allFeedback.length > 100) allFeedback.pop();
+    
+    localStorage.setItem('userFeedback', JSON.stringify(allFeedback));
+    
+    // Send to admin email (optional - can be implemented with backend)
+    console.log('Feedback submitted:', feedback);
+    
+    // Optional: Send email notification
+    // In production, you can send this to your backend API
+    /*
+    fetch('/api/submit-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(feedback)
+    });
+    */
+    
+    // Show success message
+    successDiv.style.display = 'block';
+    successDiv.textContent = '✅ Thank you for your feedback! We appreciate your input.';
+    
+    // Clear textarea
+    document.getElementById('userFeedback').value = '';
+    
+    // Track analytics
+    if (window.Analytics) {
+        Analytics.trackFeedbackSubmitted(feedbackText.length, userData);
+    }
+    
+    // Optional: Send email with feedback
+    // sendFeedbackEmail(feedback);
+}
+
+// Optional: Send feedback via email
+function sendFeedbackEmail(feedback) {
+    const subject = 'User Feedback - Social Profile Optimizer';
+    const body = `
+New Feedback Received:
+
+Platform: ${feedback.platform}
+Persona: ${feedback.persona}
+Tone: ${feedback.tone}
+Goal: ${feedback.goal}
+Date: ${new Date(feedback.date).toLocaleString()}
+
+Feedback:
+${feedback.feedback}
+
+---
+Feedback ID: ${feedback.id}
+    `;
+    
+    // This would open user's email client
+    // In production, use a backend service to send emails
+    console.log('Feedback email:', { subject, body });
 }
