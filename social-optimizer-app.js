@@ -1,0 +1,714 @@
+// Main application logic
+
+let currentStep = 1;
+let userData = {};
+let generatedProfile = null;
+let isPaid = false;
+let inputMethod = null;
+let uploadedFile = null;
+
+// Initialize app
+document.addEventListener('DOMContentLoaded', function() {
+    setupOptionCards();
+    checkDevModePrompt();
+});
+
+// Setup option card selection
+function setupOptionCards() {
+    const optionGroups = ['personaOptions', 'toneOptions', 'goalOptions'];
+    
+    optionGroups.forEach(groupId => {
+        const group = document.getElementById(groupId);
+        if (!group) return;
+        
+        const cards = group.querySelectorAll('.option-card');
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected from siblings
+                cards.forEach(c => c.classList.remove('selected'));
+                // Add selected to clicked card
+                this.classList.add('selected');
+                
+                // Store selection
+                const value = this.getAttribute('data-value');
+                if (groupId === 'personaOptions') userData.persona = value;
+                if (groupId === 'toneOptions') userData.tone = value;
+                if (groupId === 'goalOptions') userData.goal = value;
+            });
+        });
+    });
+}
+
+// Navigation functions
+function nextStep(step) {
+    // Validate current step
+    if (step === 2) {
+        if (!validateStep1()) return;
+    }
+    
+    // Hide all steps
+    document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.progress-step').forEach(s => s.classList.remove('active'));
+    
+    // Show target step
+    document.getElementById('step' + step).classList.add('active');
+    document.querySelector(`.progress-step[data-step="${step}"]`).classList.add('active');
+    
+    currentStep = step;
+    window.scrollTo(0, 0);
+}
+
+function prevStep(step) {
+    nextStep(step);
+}
+
+// Input method selection
+function selectInputMethod(method) {
+    inputMethod = method;
+    
+    // Hide all input sections
+    document.getElementById('textInput').style.display = 'none';
+    document.getElementById('linkInput').style.display = 'none';
+    document.getElementById('imageInput').style.display = 'none';
+    document.getElementById('pdfInput').style.display = 'none';
+    
+    // Remove selected class from all method cards
+    document.querySelectorAll('[data-method]').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Show selected input section
+    document.getElementById(method + 'Input').style.display = 'block';
+    document.querySelector(`[data-method="${method}"]`).classList.add('selected');
+    
+    // Clear validation messages
+    document.getElementById('validationMessages').innerHTML = '';
+}
+
+// Handle file uploads
+function handleFileUpload(event, type) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    uploadedFile = file;
+    const previewDiv = document.getElementById(type + 'Preview');
+    
+    if (type === 'image') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewDiv.innerHTML = `
+                <div class="file-preview">
+                    <img src="${e.target.result}" style="max-width: 100%; border-radius: 8px;">
+                    <p style="margin-top: 10px; color: #667eea; font-weight: bold;">✓ Image uploaded successfully</p>
+                    <p style="color: #666; font-size: 0.9em;">Our AI will analyze this screenshot to extract your profile information</p>
+                </div>
+            `;
+        };
+        reader.readAsDataURL(file);
+    } else if (type === 'pdf') {
+        previewDiv.innerHTML = `
+            <div class="file-preview">
+                <div style="font-size: 3em; text-align: center;">📄</div>
+                <p style="margin-top: 10px; color: #667eea; font-weight: bold;">✓ ${file.name}</p>
+                <p style="color: #666; font-size: 0.9em;">PDF uploaded successfully. Our AI will extract your profile information.</p>
+            </div>
+        `;
+    }
+}
+
+// Validation with detailed feedback
+function validateStep1() {
+    const platform = document.getElementById('platform').value;
+    const validationDiv = document.getElementById('validationMessages');
+    let errors = [];
+    let warnings = [];
+    
+    // Check platform
+    if (!platform) {
+        errors.push('Please select a platform (LinkedIn, Facebook, Instagram, or Twitter/X)');
+    }
+    
+    // Check input method
+    if (!inputMethod) {
+        errors.push('Please select how you want to provide your profile (Text, Link, Image, or PDF)');
+    } else {
+        // Validate based on input method
+        if (inputMethod === 'text') {
+            const bio = document.getElementById('currentBio').value;
+            if (!bio.trim()) {
+                errors.push('Please paste your current bio or about text');
+            } else if (bio.trim().length < 20) {
+                warnings.push('Your bio seems short. Add more details for better optimization.');
+            }
+            
+            const headline = document.getElementById('currentHeadline').value;
+            if (!headline.trim()) {
+                warnings.push('Consider adding your current headline for more accurate optimization');
+            }
+        } else if (inputMethod === 'link') {
+            const link = document.getElementById('profileLink').value;
+            if (!link.trim()) {
+                errors.push('Please enter your profile link or username');
+            } else if (!link.includes('http') && !link.includes('@')) {
+                warnings.push('Make sure your link is complete (e.g., https://linkedin.com/in/yourname)');
+            }
+        } else if (inputMethod === 'image' || inputMethod === 'pdf') {
+            if (!uploadedFile) {
+                errors.push(`Please upload a ${inputMethod === 'image' ? 'screenshot' : 'PDF'} of your profile`);
+            }
+        }
+    }
+    
+    // Display validation messages
+    if (errors.length > 0 || warnings.length > 0) {
+        let html = '';
+        
+        if (errors.length > 0) {
+            html += '<div class="validation-error">';
+            html += '<strong>⚠️ Missing Information:</strong><ul style="margin: 10px 0 0 20px;">';
+            errors.forEach(err => html += `<li>${err}</li>`);
+            html += '</ul></div>';
+        }
+        
+        if (warnings.length > 0) {
+            html += '<div class="validation-error" style="background: #e7f3ff; border-left-color: #2196F3; color: #0c5460;">';
+            html += '<strong>💡 Suggestions:</strong><ul style="margin: 10px 0 0 20px;">';
+            warnings.forEach(warn => html += `<li>${warn}</li>`);
+            html += '</ul></div>';
+        }
+        
+        validationDiv.innerHTML = html;
+        
+        if (errors.length > 0) {
+            validationDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return false;
+        }
+    } else {
+        validationDiv.innerHTML = '<div class="validation-success"><strong>✓ All information provided!</strong> Ready to proceed.</div>';
+    }
+    
+    // Store data
+    userData.platform = platform;
+    userData.inputMethod = inputMethod;
+    
+    if (inputMethod === 'text') {
+        userData.currentBio = document.getElementById('currentBio').value;
+        userData.currentHeadline = document.getElementById('currentHeadline').value;
+    } else if (inputMethod === 'link') {
+        userData.profileLink = document.getElementById('profileLink').value;
+        // In production, you'd fetch profile data from the link
+        userData.currentBio = `Profile from: ${userData.profileLink}`;
+    } else if (inputMethod === 'image' || inputMethod === 'pdf') {
+        userData.uploadedFile = uploadedFile.name;
+        // In production, you'd use OCR/PDF parsing to extract text
+        userData.currentBio = `Extracted from ${inputMethod}: ${uploadedFile.name}`;
+    }
+    
+    return true;
+}
+
+function validateStep2() {
+    if (!userData.persona) {
+        alert('Please select a persona');
+        return false;
+    }
+    if (!userData.tone) {
+        alert('Please select a tone/style');
+        return false;
+    }
+    if (!userData.goal) {
+        alert('Please select your primary goal');
+        return false;
+    }
+    
+    userData.keywords = document.getElementById('keywords').value || 'professional development';
+    return true;
+}
+
+// Generate preview
+function generatePreview() {
+    if (!validateStep2()) return;
+    
+    // Generate optimized profile using AI Engine
+    generatedProfile = AIEngine.generate(userData);
+    
+    // Display preview (blurred)
+    displayPreview(true);
+    
+    // Move to step 3
+    nextStep(3);
+}
+
+// Display preview or full content
+function displayPreview(isBlurred) {
+    const container = isBlurred ? document.getElementById('previewContent') : document.getElementById('fullContent');
+    const blurClass = isBlurred ? 'blur-overlay' : '';
+    
+    let html = '';
+    
+    // Headline/Bio
+    html += `
+        <div class="output-section ${blurClass}">
+            <h3>📝 ${userData.platform === 'linkedin' ? 'Optimized Headline' : 'Optimized Bio'}</h3>
+            <div class="output-text">${generatedProfile.headline}</div>
+            ${!isBlurred ? '<button class="copy-btn" onclick="copyToClipboard(\'' + generatedProfile.headline.replace(/'/g, "\\'") + '\')">📋 Copy</button>' : ''}
+        </div>
+    `;
+    
+    // About section (if available)
+    if (generatedProfile.about) {
+        html += `
+            <div class="output-section ${blurClass}">
+                <h3>📄 Optimized About Section</h3>
+                <div class="output-text" style="white-space: pre-line;">${generatedProfile.about}</div>
+                ${!isBlurred ? '<button class="copy-btn" onclick="copyToClipboard(\'' + generatedProfile.about.replace(/'/g, "\\'").replace(/\n/g, '\\n') + '\')">📋 Copy</button>' : ''}
+            </div>
+        `;
+    }
+    
+    // Content Ideas
+    html += `
+        <div class="output-section ${blurClass}">
+            <h3>💡 Content Ideas</h3>
+            <div class="output-text">
+                <ul style="margin-left: 20px;">
+                    ${generatedProfile.contentIdeas.map(idea => '<li>' + idea + '</li>').join('')}
+                </ul>
+            </div>
+            ${!isBlurred ? '<button class="copy-btn" onclick="copyToClipboard(\'' + generatedProfile.contentIdeas.join('\\n').replace(/'/g, "\\'") + '\')">📋 Copy All</button>' : ''}
+        </div>
+    `;
+    
+    // Keywords or Hashtags
+    if (generatedProfile.keywords && generatedProfile.keywords.length > 0) {
+        html += `
+            <div class="output-section ${blurClass}">
+                <h3>🔑 Recommended Keywords</h3>
+                <div class="output-text">${generatedProfile.keywords.join(' • ')}</div>
+                ${!isBlurred ? '<button class="copy-btn" onclick="copyToClipboard(\'' + generatedProfile.keywords.join(', ').replace(/'/g, "\\'") + '\')">📋 Copy</button>' : ''}
+            </div>
+        `;
+    }
+    
+    if (generatedProfile.hashtags && generatedProfile.hashtags.length > 0) {
+        html += `
+            <div class="output-section ${blurClass}">
+                <h3>#️⃣ Recommended Hashtags</h3>
+                <div class="output-text">${generatedProfile.hashtags.join(' ')}</div>
+                ${!isBlurred ? '<button class="copy-btn" onclick="copyToClipboard(\'' + generatedProfile.hashtags.join(' ').replace(/'/g, "\\'") + '\')">📋 Copy</button>' : ''}
+            </div>
+        `;
+    }
+    
+    // Add watermark branding (only on unlocked version)
+    if (!isBlurred) {
+        html += `
+            <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+                <div style="font-size: 1.2em; margin-bottom: 10px;">✨ Optimized by</div>
+                <div style="font-size: 2em; font-weight: bold; margin-bottom: 10px;">Social Profile Optimizer AI</div>
+                <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 15px;">AI-Powered Profile Optimization • Only ₹11</div>
+                <div style="font-size: 0.85em; opacity: 0.8;">Get yours at: <a href="social-optimizer-index.html" style="color: white; text-decoration: underline;">ProfileOptimizer.com</a></div>
+            </div>
+        `;
+    }
+    
+    container.innerHTML = html;
+}
+
+// Copy to clipboard
+function copyToClipboard(text) {
+    // Decode escaped characters
+    text = text.replace(/\\n/g, '\n').replace(/\\'/g, "'");
+    
+    navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Copied to clipboard!');
+    }).catch(err => {
+        console.error('Copy failed:', err);
+        // Fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert('✅ Copied to clipboard!');
+    });
+}
+
+// AUTOMATIC PAYMENT PROCESSING - No manual confirmation needed!
+// Customer pays → Profile unlocks instantly → No waiting!
+
+function processPayment() {
+    // STEP 1: Replace with your Razorpay key from https://dashboard.razorpay.com/app/keys
+    const RAZORPAY_KEY = 'rzp_test_DEMO_KEY'; // ⚠️ CHANGE THIS TO YOUR KEY!
+    
+    // For testing without Razorpay account, use demo mode
+    if (RAZORPAY_KEY === 'rzp_test_DEMO_KEY') {
+        alert('⚡ DEMO MODE\n\nThis will simulate instant payment.\n\nIn production:\n1. Sign up at razorpay.com\n2. Get your API key\n3. Replace RAZORPAY_KEY in code\n\nProfile will unlock automatically after real payment!');
+        simulatePayment();
+        return;
+    }
+    
+    // STEP 2: Check if Razorpay is loaded
+    if (typeof Razorpay === 'undefined') {
+        alert('⚠️ Payment gateway not loaded.\n\nMake sure Razorpay script is included in HTML.\n\nUsing demo mode for now...');
+        simulatePayment();
+        return;
+    }
+    
+    // STEP 3: Get user's currency and pricing
+    const pricing = window.currentPricing || window.CurrencyDetector.getCurrentPricing();
+    const amount = window.CurrencyDetector.getRazorpayAmount(pricing);
+    const displayPrice = window.CurrencyDetector.formatPrice(pricing);
+    
+    console.log('Processing payment:', pricing.currency, displayPrice, 'Amount:', amount);
+    
+    // STEP 4: Configure Razorpay with automatic unlock
+    const options = {
+        key: RAZORPAY_KEY,
+        amount: amount, // Automatically calculated based on user's country
+        currency: pricing.currency, // INR, USD, EUR, GBP, etc.
+        name: 'Social Profile Optimizer AI',
+        description: `AI-Powered Profile Optimization - ${displayPrice}`,
+        image: 'https://via.placeholder.com/150', // Optional: Add your logo URL
+        
+        // ✅ AUTOMATIC UNLOCK - This runs immediately after successful payment
+        handler: function(response) {
+            // Payment successful! Auto-unlock starts now
+            console.log('✅ Payment Success!');
+            console.log('Payment ID:', response.razorpay_payment_id);
+            console.log('Order ID:', response.razorpay_order_id);
+            console.log('Signature:', response.razorpay_signature);
+            
+            // Show processing message
+            showProcessingMessage();
+            
+            // INSTANT UNLOCK - No manual confirmation needed!
+            setTimeout(() => {
+                isPaid = true;
+                showSuccess();
+                
+                // Log payment for records
+                logPayment(response.razorpay_payment_id);
+                
+                // Optional: Send confirmation email to admin
+                notifyAdmin(response.razorpay_payment_id);
+            }, 1000); // 1 second delay for smooth UX
+        },
+        
+        // Pre-fill customer details (optional)
+        prefill: {
+            name: '',
+            email: '',
+            contact: ''
+        },
+        
+        // Store transaction metadata
+        notes: {
+            platform: userData.platform,
+            persona: userData.persona,
+            tone: userData.tone,
+            goal: userData.goal,
+            timestamp: new Date().toISOString()
+        },
+        
+        // Branding
+        theme: {
+            color: '#667eea',
+            backdrop_color: 'rgba(0, 0, 0, 0.5)'
+        },
+        
+        // Handle payment cancellation
+        modal: {
+            ondismiss: function() {
+                console.log('Payment cancelled by user');
+                alert('💡 Payment cancelled.\n\nYour preview is still available.\nYou can complete payment anytime to unlock full access!');
+            }
+        }
+    };
+    
+    // STEP 4: Open Razorpay payment modal
+    const rzp = new Razorpay(options);
+    
+    // Handle payment errors
+    rzp.on('payment.failed', function(response) {
+        console.error('Payment failed:', response.error);
+        alert('❌ Payment Failed\n\n' + response.error.description + '\n\nPlease try again or contact support: onestepforthelife@gmail.com');
+    });
+    
+    // Open payment window
+    rzp.open();
+}
+
+// Show processing message during unlock
+function showProcessingMessage() {
+    const overlay = document.createElement('div');
+    overlay.id = 'processingOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(102, 126, 234, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        color: white;
+        font-size: 1.5em;
+        text-align: center;
+        padding: 20px;
+    `;
+    overlay.innerHTML = `
+        <div>
+            <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
+            <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">Payment Successful!</div>
+            <div style="font-size: 1em; opacity: 0.9;">Unlocking your optimized profile...</div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    // Remove after showing success
+    setTimeout(() => {
+        const el = document.getElementById('processingOverlay');
+        if (el) el.remove();
+    }, 2000);
+}
+
+// Log payment for admin records
+function logPayment(paymentId) {
+    const paymentLog = JSON.parse(localStorage.getItem('paymentLog') || '[]');
+    
+    paymentLog.unshift({
+        paymentId: paymentId,
+        amount: 999,
+        platform: userData.platform,
+        persona: userData.persona,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent
+    });
+    
+    // Keep last 100 payments
+    if (paymentLog.length > 100) paymentLog.pop();
+    
+    localStorage.setItem('paymentLog', JSON.stringify(paymentLog));
+    console.log('Payment logged:', paymentId);
+}
+
+// Notify admin of new payment (optional)
+function notifyAdmin(paymentId) {
+    // In production, you can send this to your backend or email service
+    console.log('Admin notification:', {
+        paymentId: paymentId,
+        platform: userData.platform,
+        amount: '₹999',
+        time: new Date().toLocaleString()
+    });
+    
+    // Optional: Send email via backend API
+    // fetch('/api/notify-payment', {
+    //     method: 'POST',
+    //     body: JSON.stringify({ paymentId, userData })
+    // });
+}
+
+// Simulate payment for demo/testing
+function simulatePayment() {
+    if (confirm('Demo Mode: Simulate successful payment?\n\nIn production, this will use real Razorpay payment.')) {
+        setTimeout(() => {
+            isPaid = true;
+            showSuccess();
+        }, 1000);
+    }
+}
+
+// Send payment confirmation
+function sendPaymentConfirmation(paymentId) {
+    // In production, send this to your backend
+    console.log('Payment confirmed:', paymentId);
+    
+    // Optional: Send email notification
+    const subject = 'Payment Successful - Social Profile Optimizer';
+    const body = `Payment ID: ${paymentId}\nPlatform: ${userData.platform}\nAmount: ₹999`;
+    
+    // You can integrate with email service here
+}
+
+// Show success and unlock content
+function showSuccess() {
+    // Hide all steps
+    document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.progress-step').forEach(s => s.classList.remove('active'));
+    
+    // Show success
+    document.getElementById('stepSuccess').classList.add('active');
+    
+    // Display full unlocked content
+    displayPreview(false);
+    
+    // Save to localStorage for dashboard
+    saveToHistory();
+    
+    window.scrollTo(0, 0);
+}
+
+// Save optimization to history
+function saveToHistory() {
+    const history = JSON.parse(localStorage.getItem('optimizationHistory') || '[]');
+    
+    const record = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        platform: userData.platform,
+        persona: userData.persona,
+        tone: userData.tone,
+        goal: userData.goal,
+        profile: generatedProfile
+    };
+    
+    history.unshift(record);
+    
+    // Keep only last 10
+    if (history.length > 10) history.pop();
+    
+    localStorage.setItem('optimizationHistory', JSON.stringify(history));
+}
+
+// Download profile as text file
+function downloadProfile() {
+    let content = `OPTIMIZED SOCIAL MEDIA PROFILE\n`;
+    content += `Platform: ${userData.platform.toUpperCase()}\n`;
+    content += `Generated: ${new Date().toLocaleDateString()}\n`;
+    content += `\n${'='.repeat(50)}\n\n`;
+    
+    content += `HEADLINE/BIO:\n${generatedProfile.headline}\n\n`;
+    
+    if (generatedProfile.about) {
+        content += `ABOUT SECTION:\n${generatedProfile.about}\n\n`;
+    }
+    
+    content += `CONTENT IDEAS:\n`;
+    generatedProfile.contentIdeas.forEach((idea, i) => {
+        content += `${i + 1}. ${idea}\n`;
+    });
+    content += `\n`;
+    
+    if (generatedProfile.keywords && generatedProfile.keywords.length > 0) {
+        content += `KEYWORDS:\n${generatedProfile.keywords.join(', ')}\n\n`;
+    }
+    
+    if (generatedProfile.hashtags && generatedProfile.hashtags.length > 0) {
+        content += `HASHTAGS:\n${generatedProfile.hashtags.join(' ')}\n\n`;
+    }
+    
+    // Add watermark branding
+    content += `\n${'='.repeat(50)}\n`;
+    content += `✨ Optimized by Social Profile Optimizer AI\n`;
+    content += `AI-Powered Profile Optimization • Only ₹11\n`;
+    content += `Get yours at: ProfileOptimizer.com\n`;
+    content += `Email: onestepforthelife@gmail.com\n`;
+    content += `${'='.repeat(50)}\n`;
+    
+    // Create download
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `optimized-profile-${userData.platform}-${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+
+// Developer Mode
+function checkDevModePrompt() {
+    // Show dev mode prompt after 30 seconds or on certain actions
+    setTimeout(() => {
+        const prompt = document.getElementById('devModePrompt');
+        if (prompt) prompt.style.display = 'block';
+    }, 30000);
+}
+
+function showDevMode() {
+    const devInfo = `
+🔧 DEVELOPER MODE ACTIVATED
+
+📧 Contact Email: onestepforthelife@gmail.com
+
+🛠️ TECHNICAL DETAILS:
+
+FILES STRUCTURE:
+- social-optimizer-index.html (Landing page)
+- social-optimizer-app.html (Main wizard)
+- social-optimizer-dashboard.html (User dashboard)
+- social-optimizer-admin.html (Admin panel)
+- social-optimizer-ai-engine.js (AI templates)
+- social-optimizer-app.js (App logic)
+
+PAYMENT INTEGRATION:
+Current: Demo mode (simulated)
+Production: Add Stripe/Razorpay/PayPal
+
+To integrate Stripe:
+1. Get API keys from stripe.com
+2. Add <script src="https://js.stripe.com/v3/"></script>
+3. Update processPayment() function with real Stripe code
+4. Set up webhook for payment confirmation
+
+FILE UPLOAD PROCESSING:
+- Images: Use OCR API (Google Vision, AWS Textract)
+- PDFs: Use PDF.js or server-side parsing
+- Links: Use web scraping or platform APIs
+
+DEPLOYMENT:
+1. Upload to Cloudflare Pages
+2. No build process needed
+3. Configure custom domain
+4. Set environment variables for API keys
+
+DATABASE (Optional):
+- Current: LocalStorage (client-side)
+- Production: Firebase, Supabase, or custom backend
+
+Need help? Email: onestepforthelife@gmail.com
+
+Press OK to continue in user mode.
+    `;
+    
+    alert(devInfo);
+    document.getElementById('devModePrompt').style.display = 'none';
+}
+
+// Email integration for support
+function sendSupportEmail(subject, body) {
+    const email = 'onestepforthelife@gmail.com';
+    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+}
+
+// Add support button functionality
+function showSupport() {
+    const message = `
+Need help with Social Profile Optimizer AI?
+
+📧 Email: onestepforthelife@gmail.com
+
+Common Questions:
+- How to upload my profile?
+- Payment not working?
+- Need custom optimization?
+- Technical support?
+
+Click OK to send an email.
+    `;
+    
+    if (confirm(message)) {
+        sendSupportEmail(
+            'Support Request - Social Profile Optimizer',
+            'Hi,\n\nI need help with:\n\n[Describe your issue here]\n\nPlatform: ' + (userData.platform || 'Not selected') + '\n\nThank you!'
+        );
+    }
+}
