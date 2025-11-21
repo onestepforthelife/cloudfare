@@ -25,11 +25,11 @@ body::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-45deg);
-    font-size: 80px;
+    font-size: 100px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.08);
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
     white-space: nowrap;
     user-select: none;
 }
@@ -38,6 +38,8 @@ body::before {
     margin: 0 auto;
     background: white;
     border-radius: 15px;
+    position: relative;
+    z-index: 2;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
@@ -315,6 +317,21 @@ body::before {
     .panel-image {
         height: 300px;
     }
+    .container {
+        padding: 30px 20px;
+    }
+    body::before { font-size: 60px; }
+}
+
+@media (max-width: 480px) {
+    .hero h1 { font-size: 24px; }
+    .tagline { font-size: 16px; }
+    .hero { padding: 30px 15px; }
+    .content { padding: 15px; }
+    .container { padding: 20px 15px; }
+    .timeline { padding-left: 20px; }
+    .panel-image { height: 250px; }
+    body::before { font-size: 40px; }
 }
 </style>
 </head>

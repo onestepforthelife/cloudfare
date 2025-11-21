@@ -23,16 +23,18 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 80px;
+            font-size: 100px;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.08);
             pointer-events: none;
-            z-index: 0;
+            z-index: 1;
             white-space: nowrap;
             user-select: none;
         }
         .wizard-container {
             max-width: 1200px;
+            position: relative;
+            z-index: 2;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -43,6 +45,36 @@
             .wizard-container {
                 padding: 30px 20px;
             }
+            .step-content h2 { font-size: 1.5em; }
+            .button-group button {
+                padding: 12px 30px;
+                font-size: 0.95em;
+            }
+            .progress-step {
+                font-size: 0.85em;
+                padding: 8px 5px;
+            }
+            body::before { font-size: 60px; }
+        }
+        
+        @media (max-width: 480px) {
+            .wizard-container {
+                padding: 20px 15px;
+            }
+            .step-content h2 { font-size: 1.3em; }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .button-group button {
+                width: 100%;
+            }
+            .progress-step {
+                font-size: 0.75em;
+                padding: 6px 3px;
+                margin: 0 2px;
+            }
+            body::before { font-size: 40px; }
         }
         .progress-bar {
             display: flex;
@@ -400,8 +432,25 @@
         <div class="step-content" id="step4">
             <h2>Step 4: Unlock Your Optimized Profile</h2>
             
+            <!-- Access Code Option -->
+            <div style="background: #d4edda; padding: 25px; border-radius: 15px; margin-bottom: 25px; border-left: 4px solid #28a745;">
+                <h3 style="color: #155724; margin-bottom: 15px;">🎟️ Have an Access Code?</h3>
+                <p style="color: #155724; margin-bottom: 15px; font-size: 0.95em;">If you received an access code from Amit, enter it below for instant free access.</p>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="accessCode" placeholder="Enter your access code" style="flex: 1; padding: 12px; border: 2px solid #28a745; border-radius: 8px; font-size: 1em; text-transform: uppercase;">
+                    <button onclick="checkAccessCode()" style="background: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; white-space: nowrap;">
+                        Unlock Now
+                    </button>
+                </div>
+                <div id="accessCodeError" style="color: #dc3545; margin-top: 10px; display: none; font-weight: bold;">
+                    ❌ Invalid access code. Please check and try again.
+                </div>
+            </div>
+
+
+            <!-- Regular Payment Option -->
             <div style="text-align: center; margin-bottom: 30px;">
-                <h3 style="font-size: 2em; color: #667eea; margin-bottom: 10px;">🔓 Unlock Full Access</h3>
+                <h3 style="font-size: 2em; color: #667eea; margin-bottom: 10px;">💳 Or Pay Instantly</h3>
                 <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">Get your complete optimized profile with copy-paste ready content</p>
                 <div style="font-size: 3em; font-weight: bold; color: #667eea; margin: 10px 0;" data-price>₹21 only!</div>
                 <p style="color: #999;">One-time payment • Instant unlock • Lifetime access</p>
@@ -488,6 +537,49 @@
                 initPaymentOptions();
             }
         };
+
+        // ACCESS CODE SYSTEM
+        function checkAccessCode() {
+            const code = document.getElementById('accessCode').value.toUpperCase().trim();
+            const validCodes = [
+                'RECRUITER2025',
+                'PARTNER2025',
+                'VIP2025',
+                'BASF2025',
+                'MEDIA2025'
+            ];
+            
+            if (validCodes.includes(code)) {
+                // Valid code - bypass payment
+                document.getElementById('accessCodeError').style.display = 'none';
+                alert('✅ Access code verified! Unlocking your profile...');
+                showStep('stepSuccess');
+                generateFullContent();
+                
+                // Track access code usage
+                if (typeof UniversalAnalytics !== 'undefined') {
+                    UniversalAnalytics.trackEvent('access_code_used', {
+                        event_category: 'conversion',
+                        event_label: code
+                    });
+                }
+            } else {
+                // Invalid code
+                document.getElementById('accessCodeError').style.display = 'block';
+            }
+        }
+
+        // Allow Enter key to submit access code
+        document.addEventListener('DOMContentLoaded', function() {
+            const accessCodeInput = document.getElementById('accessCode');
+            if (accessCodeInput) {
+                accessCodeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkAccessCode();
+                    }
+                });
+            }
+        });
     </script>
 
     <!-- Footer Branding -->
