@@ -35,11 +35,23 @@ Professional market analysis and strategic intelligence:
 - Value Chain & Margin Analysis
 - Business Strategy & Planning
 
-## 🔐 Access
+## 🔐 Access Control
 
-**Password:** `acrylic2024`
+**Email-Based Approval System**
 
-To change password, edit line 91 in `index.html`
+Access requires approval. Visitors must:
+1. Submit access request with email and LinkedIn profile
+2. Wait for approval (typically within 24 hours)
+3. Receive approval email with access instructions
+4. Use their email to log in
+
+**Admin Access:** Quick login available for administrators
+
+**Approved Users:**
+- aragreat@gmail.com
+- onestepforthelife@gmail.com
+
+To approve new users, add their email to `APPROVED_EMAILS` array in `index.html`
 
 ## 🚀 Technology Stack
 
