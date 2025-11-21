@@ -350,22 +350,16 @@
         <div class="step-content" id="step4">
             <h2>Step 4: Unlock Your Optimized Profile</h2>
             
-            <div class="payment-prompt">
-                <h3 style="font-size: 2em; margin-bottom: 20px;">🔓 Unlock Full Access</h3>
-                <p style="font-size: 1.2em; margin-bottom: 30px;">Get your complete optimized profile with copy-paste ready content</p>
-                <div style="font-size: 3em; font-weight: bold; margin: 20px 0;" data-price>₹11 only!</div>
-                <div id="currency-info"></div>
-                <p style="margin-bottom: 30px;">One-time payment • Instant automatic unlock • Lifetime availability</p>
-                
-                <button class="btn-primary" data-payment-button style="background: white; color: #667eea; padding: 20px 50px; font-size: 1.2em;" onclick="processPayment()">
-                    💳 Pay ₹11 - Instant Access
-                </button>
-                
-                <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.9;">✅ Automatic unlock after payment • Card, UPI, Wallets accepted</p>
-                <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">Powered by Razorpay • Secure & Instant</p>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h3 style="font-size: 2em; color: #667eea; margin-bottom: 10px;">🔓 Unlock Full Access</h3>
+                <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">Get your complete optimized profile with copy-paste ready content</p>
+                <div style="font-size: 3em; font-weight: bold; color: #667eea; margin: 10px 0;" data-price>₹11 only!</div>
+                <p style="color: #999;">One-time payment • Instant unlock • Lifetime access</p>
             </div>
+            
+            <div id="paymentOptions"></div>
 
-            <div class="button-group">
+            <div class="button-group" style="margin-top: 30px;">
                 <button class="btn-secondary" onclick="prevStep(3)">← Back to Preview</button>
             </div>
         </div>
@@ -389,14 +383,36 @@
         🔧 Need Developer Mode?
     </div>
 
-    <!-- Razorpay Payment Gateway (Zero Monthly Cost!) -->
+    <!-- Payment Gateways -->
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
-    <!-- Currency Detection Script -->
+    <!-- Currency Detection & Payment Selector -->
     <script src="currency-detector.js"></script>
+    <script src="payment-selector.js"></script>
     
     <script src="social-optimizer-ai-engine.js"></script>
     <script src="social-optimizer-app.js"></script>
+    
+    <script>
+        // Initialize payment options when step 4 loads
+        function initPaymentOptions() {
+            const container = document.getElementById('paymentOptions');
+            if (container) {
+                container.innerHTML = PaymentGateway.showPaymentOptions();
+            }
+        }
+        
+        // Call when moving to step 4
+        const originalNextStep = nextStep;
+        nextStep = function(step) {
+            originalNextStep(step);
+            if (step === 4) {
+                initPaymentOptions();
+            }
+        };
+    </script>
 
     <!-- Footer Branding -->
     <div style="text-align: center; padding: 20px; color: #999; font-size: 0.85em; margin-top: 40px; border-top: 1px solid #e0e0e0;">

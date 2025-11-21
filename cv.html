@@ -1,495 +1,691 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Professional CV - Amit Agrawal</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    padding: 20px;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amit Kumar - Board-Ready Transformation Architect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Password Screen */
-.password-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-.password-container {
-    background: white;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    max-width: 400px;
-    width: 100%;
-}
-.password-container h1 {
-    color: #333;
-    font-size: 28px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-.password-container p {
-    color: #666;
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 14px;
-}
-.password-container input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 15px;
-}
-.password-container input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-.password-container button {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-.password-container button:hover {
-    transform: translateY(-2px);
-}
-.error-msg {
-    color: #e74c3c;
-    font-size: 14px;
-    text-align: center;
-    margin-top: 10px;
-    display: none;
-}
-.back-link {
-    text-align: center;
-    margin-top: 20px;
-}
-.back-link a {
-    color: #667eea;
-    text-decoration: none;
-    font-size: 14px;
-}
-.back-link a:hover {
-    text-decoration: underline;
-}
+        body {
+            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.4;
+        }
 
-/* CV Content */
-.cv-content {
-    display: none;
-    max-width: 1000px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 15px;
-    padding: 50px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-}
-.cv-header {
-    text-align: center;
-    padding-bottom: 30px;
-    border-bottom: 3px solid #667eea;
-    margin-bottom: 40px;
-}
-.cv-header h1 {
-    color: #333;
-    font-size: 36px;
-    margin-bottom: 10px;
-}
-.cv-header .title {
-    color: #667eea;
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-.cv-header .contact {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    font-size: 14px;
-    color: #666;
-}
-.cv-header .contact a {
-    color: #667eea;
-    text-decoration: none;
-}
-.cv-section {
-    margin-bottom: 40px;
-}
-.cv-section h2 {
-    color: #667eea;
-    font-size: 24px;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e0e0e0;
-}
-.cv-section p {
-    color: #444;
-    line-height: 1.8;
-    margin-bottom: 15px;
-}
-.cv-section ul {
-    margin-left: 20px;
-    line-height: 2;
-    color: #444;
-}
-.job-entry {
-    margin-bottom: 30px;
-}
-.job-entry h3 {
-    color: #333;
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-.job-entry .company {
-    color: #667eea;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-.job-entry .period {
-    color: #888;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-}
-.skill-item {
-    background: #f5f7ff;
-    padding: 12px;
-    border-radius: 5px;
-    border-left: 3px solid #667eea;
-}
-.logout-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    background: rgba(231, 76, 60, 0.9);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    z-index: 1000;
-}
-.logout-btn:hover {
-    background: #e74c3c;
-}
-.watermark {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-45deg);
-    font-size: 80px;
-    font-weight: 700;
-    color: rgba(102, 126, 234, 0.03);
-    pointer-events: none;
-    z-index: 0;
-    white-space: nowrap;
-    user-select: none;
-}
-.cv-content {
-    position: relative;
-    z-index: 1;
-}
-@media print {
-    body { background: white; padding: 0; }
-    .cv-content { box-shadow: none; }
-    .logout-btn { display: none; }
-    .watermark { color: rgba(102, 126, 234, 0.05); }
-}
-</style>
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 35px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header .title {
+            font-size: 1.05em;
+            margin-bottom: 12px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 12px;
+        }
+
+        .contact-info span {
+            color: white;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+
+        .content {
+            padding: 30px 40px;
+        }
+
+        .section {
+            margin-bottom: 22px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.15em;
+            margin-bottom: 10px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #667eea;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .executive-summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .highlight-item {
+            padding: 10px 12px;
+            font-size: 0.88em;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #764ba2;
+            line-height: 1.4;
+        }
+
+        .highlight-item::before {
+            content: "• ";
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .experience-item {
+            margin-bottom: 15px;
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+
+        .experience-title h3 {
+            color: #333;
+            font-size: 1.05em;
+            font-weight: 700;
+            display: inline;
+        }
+
+        .experience-title .role {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95em;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .experience-date {
+            color: #666;
+            font-weight: 600;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+
+        .experience-details {
+            font-size: 0.88em;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #764ba2;
+            font-size: 0.88em;
+        }
+
+        .achievements ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 6px;
+        }
+
+        .achievements li {
+            padding: 3px 0 3px 15px;
+            position: relative;
+            color: #444;
+            font-size: 0.88em;
+            line-height: 1.4;
+        }
+
+        .achievements li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .competencies {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .competency-item {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+            font-size: 0.85em;
+            color: #333;
+        }
+
+        .education-item {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .education-item h3 {
+            color: #333;
+            font-size: 0.95em;
+            font-weight: 700;
+        }
+
+        .education-item .institution {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.88em;
+        }
+
+        .education-item .date {
+            color: #666;
+            font-size: 0.82em;
+        }
+
+        .board-themes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .theme-tag {
+            padding: 6px 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.82em;
+            font-weight: 500;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 15px 20px;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .print-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .back-button,
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
+    <a href="library.html" class="back-button">← Back to Library</a>
 
-<!-- Password Screen -->
-<div class="password-screen" id="passwordScreen">
-    <div class="password-container">
-        <h1>🔒 Protected CV</h1>
-        <p>This CV is shared privately. Please enter the password provided to you.</p>
-        <form id="passwordForm">
-            <input type="password" id="passwordInput" placeholder="Enter password" required autofocus>
-            <button type="submit">Access CV</button>
-            <div class="error-msg" id="errorMsg">Incorrect password. Please try again.</div>
-        </form>
-        <div class="back-link">
-            <a href="index.html">← Back to Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>AMIT KUMAR</h1>
+            <div class="title">Transformation Architect | Governance & DEI Steward | APAC Institutional Advisor</div>
+            <div class="title" style="font-size: 0.9em; opacity: 0.9;">IEI Fellow, CEng | Mumbai, India</div>
+            <div class="contact-info">
+                <span>+91-9811409022</span>
+                <span>annikavashist@gmail.com</span>
+                <span>linkedin.com/in/leadershipexpertamit</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Professional Summary -->
+            <div class="section">
+                <h2>Professional Summary</h2>
+                <div class="executive-summary">
+                    20+ years leading $100M+ portfolios across chemicals, pharma, and automotive. Trusted by boards, regulators, and development banks across APAC and South Asia. Known for ethical leadership, governance depth, and legacy-driven impact. Architected multi-billion-dollar growth strategies, built governance frameworks, and advised CXOs on ESG, DEI, and institutional reform.
+                </div>
+            </div>
+
+            <!-- Executive Highlights -->
+            <div class="section">
+                <h2>Executive Highlights</h2>
+                <div class="highlights">
+                    <div class="highlight-item">Owned $150–180M P&L across BASF, DSM & 3M—delivering 25%+ CAGR</div>
+                    <div class="highlight-item">Strategic Vision: Architected a 3-year South-Asia business plan, consolidating divisional roadmaps into one cohesive growth strategy</div>
+                    <div class="highlight-item">Operations Leadership: Built a safety-first, compliant hub across three plants—zero lost-time incidents, 30% faster delivery</div>
+                    <div class="highlight-item">Market & Partnership Expansion: Scaled three greenfield ventures from zero to 25% CAGR via strategic alliances and automation</div>
+                    <div class="highlight-item">Digital & Process Transformation: Cut business cycles 50%, extended longevity >10 years & drove $50M+ uplift through systematic workflows</div>
+                    <div class="highlight-item">Accelerated business kick off by 30% via SAP/Salesforce enablement and lifecycle optimization</div>
+                    <div class="highlight-item">ESG & Stakeholder Engagement: Secured regulatory certifications for SKUs; embedded governance frameworks to ensure 100% compliance</div>
+                    <div class="highlight-item">Advisory Mindset: Enabled CXO-level decision-making through dashboarding, risk governance, and contract compliance frameworks across APAC</div>
+                </div>
+            </div>
+
+            <!-- Core Competencies -->
+            <div class="section">
+                <h2>Core Competencies</h2>
+                <div class="competencies">
+                    <div class="competency-item">Strategic Growth & P&L Ownership</div>
+                    <div class="competency-item">Digital Transformation (SAP S/4HANA, Salesforce, CPQ)</div>
+                    <div class="competency-item">Contract Lifecycle & Governance Enablement</div>
+                    <div class="competency-item">Telecom Strategy & Customer Lifecycle Optimization</div>
+                    <div class="competency-item">Project Advisory & Risk Mitigation</div>
+                    <div class="competency-item">CXO Dashboarding & Stakeholder Engagement</div>
+                    <div class="competency-item">ESG Compliance & Value Realization</div>
+                    <div class="competency-item">Team Mentorship & Institutional Marketing</div>
+                    <div class="competency-item">Agile Delivery & Digital Workflow Enablement</div>
+                    <div class="competency-item">Data Strategy & Business Intelligence</div>
+                </div>
+            </div>
+
+            <!-- Professional Experience -->
+            <div class="section">
+                <h2>Professional Experience</h2>
+
+                <!-- BASF Current Role -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>BASF India Ltd.</h3>
+                            <div class="role">Head – Business Excellence, Projects & Institutional Sales</div>
+                        </div>
+                        <div class="experience-date">Jul 2024 – Present</div>
+                    </div>
+                    <div class="experience-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Tools of Focus:</div>
+                            <div class="detail-value">Salesforce, CRM, CPQ, Power BI, SAP S/4HANA, Agile Delivery, AI-led Dashboards, Contract Lifecycle Governance, BIS/DCPC Compliance</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Markets:</div>
+                            <div class="detail-value">Automotive, Railways, Industrial, Universal, Footwear</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Scope:</div>
+                            <div class="detail-value">South Asia, Materials Turnover, CXO Oversight</div>
+                        </div>
+                    </div>
+                    <div class="achievements">
+                        <h4>Key Achievements:</h4>
+                        <ul>
+                            <li>Enhanced customer and new business focus by 200%</li>
+                            <li>Implemented online sales gateways across SBUs</li>
+                            <li>Initiated governance frameworks aligned with board expectations</li>
+                            <li>Built CXO-level dashboards for complexity & compliance tracking</li>
+                            <li>Created BIS regulatory certification framework</li>
+                            <li>Finalized key account plans and led leadership reviews</li>
+                            <li>Enabled CRM-driven customer lifecycle & AI workflow checks</li>
+                            <li>Supporting scalable growth in digitally regulated environments</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BASF Head EP South Asia -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>BASF India Ltd.</h3>
+                            <div class="role">Head – EP South Asia | Japan Integration Manager (India)</div>
+                        </div>
+                        <div class="experience-date">Jul 2023 – Jun 2024</div>
+                    </div>
+                    <div class="experience-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Products:</div>
+                            <div class="detail-value">Engineering Plastics, PU, TPU (Local & Imports)</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Markets:</div>
+                            <div class="detail-value">Automotive, Railways, Industrial, Universal</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Turnover & Growth:</div>
+                            <div class="detail-value">~$100M | ~11% CAGR</div>
+                        </div>
+                    </div>
+                    <div class="achievements">
+                        <h4>Key Achievements:</h4>
+                        <ul>
+                            <li>Implemented commodity sales strategy for recurring, profitable growth</li>
+                            <li>Delivered overnight sales impact through targeted launches</li>
+                            <li>Strengthened APAC collaboration for portfolio alignment</li>
+                            <li>Delivered CXO dashboards for churn, margin, and SLA governance</li>
+                            <li>Supported APAC-wide portfolio alignment and risk mitigation</li>
+                            <li>Excelled in distribution optimization, expansion, harmonization & compliance</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BASF Regional Manager Automotive -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>BASF India Ltd.</h3>
+                            <div class="role">Regional Manager Automotive | Japan Integration Manager (India)</div>
+                        </div>
+                        <div class="experience-date">Apr 2016 – Jun 2022</div>
+                    </div>
+                    <div class="experience-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Products:</div>
+                            <div class="detail-value">Engineering Plastics, PU, TPU (Local & Imports)</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Markets:</div>
+                            <div class="detail-value">Automotive, Railways, Furniture</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Turnover & Growth:</div>
+                            <div class="detail-value">EP: $20M → $70M (~25% CAGR) | PU: $35M → $45M (~5% CAGR)</div>
+                        </div>
+                    </div>
+                    <div class="achievements">
+                        <h4>Key Achievements:</h4>
+                        <ul>
+                            <li>Removed 25-year legacy agents to streamline operations</li>
+                            <li>Identified low-margin accounts and implemented corrective actions</li>
+                            <li>De-risked business by onboarding new players</li>
+                            <li>Localized global products with consistent quality standards</li>
+                            <li>Reduced cost to serve by 0.5%</li>
+                            <li>Cut VOC emissions through product reformulation</li>
+                            <li>Optimized distributor network for margin and reach</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BASF Regional Manager North & East -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>BASF India Ltd.</h3>
+                            <div class="role">Regional Manager – North & East India | Japan Integration Manager</div>
+                        </div>
+                        <div class="experience-date">Feb 2011 – Mar 2016</div>
+                    </div>
+                    <div class="experience-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Products:</div>
+                            <div class="detail-value">Engineering Plastics (Local & Imports)</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Markets:</div>
+                            <div class="detail-value">Automotive, Electrical, Railways, Furniture, Footwear</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Turnover & Growth:</div>
+                            <div class="detail-value">$3M → $30M (~60% CAGR)</div>
+                        </div>
+                    </div>
+                    <div class="achievements">
+                        <h4>Key Achievements:</h4>
+                        <ul>
+                            <li>Built 100% clean business from scratch without price dilution or cross-selling</li>
+                            <li>Added new customers to win 60–100% market share in end markets</li>
+                            <li>Built OEM relationships from scratch (Maruti, Hero, Honda)</li>
+                            <li>Reduced sales cycle by 30% through direct engagement</li>
+                            <li>Created India-first metal-to-plastic conversion applications</li>
+                            <li>Established regional dominance with minimal marketing spend</li>
+                            <li>Won sales award for localization and RM source approvals</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3M India -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>3M India Pvt. Ltd.</h3>
+                            <div class="role">Manager (Sales & Marketing) - Energy & Advanced Materials Division</div>
+                        </div>
+                        <div class="experience-date">Mar 2010 – Jan 2011</div>
+                    </div>
+                    <div class="experience-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Scope:</div>
+                            <div class="detail-value">North & East India | 3M Euro Fluoropolymers business | 40% CAGR</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Markets:</div>
+                            <div class="detail-value">Electronics, Polymer Processing, Multilayer Films, Wire & Cables, Rubber, Oil & Gas, Automotive</div>
+                        </div>
+                    </div>
+                    <div class="achievements">
+                        <h4>Responsibilities:</h4>
+                        <ul>
+                            <li>Techno-commercial role managing Fluoropolymers, Surfactants, Glass Bubbles, PPA</li>
+                            <li>Ambassador for Quality, Cost & Value across universal industries</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DSM Engineering Plastics -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>DSM Engineering Plastics (now Envalior)</h3>
+                            <div class="role">Business Development - North India</div>
+                        </div>
+                        <div class="experience-date">Aug 2007 – Feb 2010</div>
+                    </div>
+                    <div class="experience-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Scope:</div>
+                            <div class="detail-value">6M Euro business | 40% CAGR</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Markets:</div>
+                            <div class="detail-value">Automotive & Electrical segments with OEMs, Tier 1 & 2</div>
+                        </div>
+                    </div>
+                    <div class="achievements">
+                        <h4>Focus:</h4>
+                        <ul>
+                            <li>Techno-commercial role for Engineering Plastics</li>
+                            <li>Value Selling (Conceptual & Strategic)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Avery Dennison -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Avery Dennison India Pvt. Ltd.</h3>
+                            <div class="role">Leadership Development Program - Plant Operations</div>
+                        </div>
+                        <div class="experience-date">Jun 2006 – Aug 2007</div>
+                    </div>
+                    <div class="experience-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Location:</div>
+                            <div class="detail-value">Gurgaon Plant</div>
+                        </div>
+                    </div>
+                    <div class="achievements">
+                        <h4>Responsibilities:</h4>
+                        <ul>
+                            <li>Team handling for Plant Operations, Inventory, Adhesive Compounding, Process, Production</li>
+                            <li>Health & Safety, 5S, Plant layout, Personnel management</li>
+                            <li>Sustainability under ESG (VOC, GHG, Carbon Footprint) & GMP aspects</li>
+                            <li>Adhesive Quality & Cost Management, Plant team Morale & motivation</li>
+                            <li>Implemented ESG initiatives—reduced VOC emissions 10% and optimized waste management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="section">
+                <h2>Education</h2>
+                <p style="margin-bottom: 20px; color: #666; font-style: italic;">All-India Merit Scholar from Elite Government Colleges</p>
+                
+                <div class="education-item">
+                    <h3>MBA - Master of Business Administration</h3>
+                    <div class="institution">Indira Gandhi National Open University</div>
+                    <div class="date">Dec. 2024 | First Division</div>
+                </div>
+
+                <div class="education-item">
+                    <h3>B.E. - Bachelor of Engineering (Polymer Science & Chemical Technology)</h3>
+                    <div class="institution">Delhi College of Engineering, Delhi University</div>
+                    <div class="date">Aug 2002 – Jun 2006 | First Division</div>
+                </div>
+
+                <div class="education-item">
+                    <h3>Diploma in Pharmacy (Associate Degree)</h3>
+                    <div class="institution">Directorate of Technical Education, Delhi Government</div>
+                    <div class="date">Aug 2000 – Jul 2002 | First Division</div>
+                </div>
+
+                <div class="education-item">
+                    <h3>LLB - Law of Contracts, Anti-Trust, Torts, Regulations & Compliance</h3>
+                    <div class="institution">Faculty of Law, Delhi University</div>
+                    <div class="date">Aug 2012 – May 2013 | 1 year Coursework</div>
+                </div>
+            </div>
+
+            <!-- Training & Certifications -->
+            <div class="section">
+                <h2>Training & Professional Development</h2>
+                <div class="competencies">
+                    <div class="competency-item">Business Excellence Program, BASF Germany</div>
+                    <div class="competency-item">Miller Heiman Strategic Selling Certification</div>
+                    <div class="competency-item">Executive Certification in Conflict Resolution</div>
+                    <div class="competency-item">Red & Blue Ocean Strategy Workshops</div>
+                    <div class="competency-item">Advanced Negotiation & Customer Intimacy Workshop</div>
+                </div>
+            </div>
+
+            <!-- Professional Memberships -->
+            <div class="section">
+                <h2>Professional Memberships</h2>
+                <div class="executive-summary">
+                    <p><strong>Life Member:</strong> IIICA · QCFI · IEI · PCI · IIChe</p>
+                </div>
+            </div>
+
+            <!-- Board Readiness & Global Impact -->
+            <div class="section">
+                <h2>Board Readiness & Global Impact</h2>
+                <div class="executive-summary">
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 8px 0;">✓ Built CXO dashboards for governance, churn & SLA visibility at APAC</li>
+                        <li style="padding: 8px 0;">✓ Advocated for chemical safety and citizen equity as a disabled high-contributing leader</li>
+                        <li style="padding: 8px 0;">✓ Created BIS certification frameworks & contract-lifecycle governance systems</li>
+                        <li style="padding: 8px 0;">✓ Positioned transformation legacy for Global Talent and PR pathways through quantified impact, governance depth, and inclusive leadership</li>
+                        <li style="padding: 8px 0;">✓ Associated with Asian Development Bank as consultant-level member, participating in governance and reform knowledge exchanges</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Legacy Domains & Board Themes -->
+            <div class="section">
+                <h2>Legacy Domains & Board Themes</h2>
+                <div class="board-themes">
+                    <div class="theme-tag">Governance</div>
+                    <div class="theme-tag">CXO Succession</div>
+                    <div class="theme-tag">ESG Stewardship</div>
+                    <div class="theme-tag">ASEAN Partnerships</div>
+                    <div class="theme-tag">DEI Advocacy</div>
+                    <div class="theme-tag">Institutional Reform</div>
+                    <div class="theme-tag">APAC Strategy</div>
+                    <div class="theme-tag">Pharma Compliance</div>
+                    <div class="theme-tag">Board Advisory</div>
+                    <div class="theme-tag">Legacy Stewardship</div>
+                    <div class="theme-tag">Digital Transformation</div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Watermark -->
-<div class="watermark">AV © Onestepforthelife</div>
+    <button class="print-button" onclick="window.print()">🖨️ Print / Save PDF</button>
 
-<!-- CV Content (Hidden until password correct) -->
-<div class="cv-content" id="cvContent">
-    <button class="logout-btn" onclick="logout()">🚪 Logout</button>
-    
-    <div class="cv-header">
-        <h1>Amit Agrawal</h1>
-        <div class="title">Specialty Chemicals Leader | Innovation Futurist | Board-Ready Executive</div>
-        <div class="contact">
-            <span>📧 aragreat@gmail.com</span>
-            <span>📱 +91-9650901728</span>
-            <span>📍 Navi Mumbai, India</span>
-            <a href="https://www.linkedin.com/in/leadershipexpertamit/" target="_blank">🔗 LinkedIn</a>
-        </div>
-    </div>
-
-    <div class="cv-section">
-        <h2>Professional Summary</h2>
-        <p>Leadership-ready specialty chemicals executive with 19+ years of P&L stewardship, delivering 25%+ CAGR through strategic market expansion, customer acquisition, and robust ESG governance. Proven track record of compressing sales cycles by 30-90%, unlocking ₹X00 Cr+ incremental revenue, and scaling greenfield ventures.</p>
-        <p>Unique ability to recognize patterns and predict trends 4-15 years before mainstream adoption, demonstrated through 9 documented innovations from 2001-2017. Work eligible in USA, Canada, Singapore, Germany, and Australia.</p>
-    </div>
-
-    <div class="cv-section">
-        <h2>Core Competencies</h2>
-        <div class="skills-grid">
-            <div class="skill-item">P&L Management & Strategy</div>
-            <div class="skill-item">Business Development</div>
-            <div class="skill-item">ESG Governance</div>
-            <div class="skill-item">Digital Transformation</div>
-            <div class="skill-item">Market Expansion</div>
-            <div class="skill-item">Customer Acquisition</div>
-            <div class="skill-item">Cross-Cultural Leadership</div>
-            <div class="skill-item">Team Building</div>
-            <div class="skill-item">Strategic Partnerships</div>
-            <div class="skill-item">Innovation & Foresight</div>
-            <div class="skill-item">SAP S/4HANA & Salesforce</div>
-            <div class="skill-item">Specialty Chemicals</div>
-        </div>
-    </div>
-
-    <div class="cv-section">
-        <h2>Professional Experience</h2>
-        
-        <div class="job-entry">
-            <h3>Head - Projects, Business Excellence, Institutional Marketing</h3>
-            <div class="company">BASF India</div>
-            <div class="period">July 2024 - Present</div>
-            <ul>
-                <li>Driving Business Excellence and digital transformation in India's chemical sector</li>
-                <li>Implementing SAP S/4HANA/ERP/Salesforce solutions to enhance operational efficiency</li>
-                <li>Building strategic partnerships to increase brand visibility and thought leadership</li>
-                <li>Developing and executing plans to enhance growth, efficiency, and profitability</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Sales & Marketing Head - Industrial Business, South Asia</h3>
-            <div class="company">BASF India</div>
-            <div class="period">July 2023 - July 2024</div>
-            <ul>
-                <li>Spearheaded profitability in unprofitable accounts and Strategic Business Units</li>
-                <li>Achieved XX Mio Euro business with 25%+ CAGR in Performance Materials Division</li>
-                <li>Drove year-over-year growth through automation, process improvements, and team reenergization</li>
-                <li>Successfully convinced customers to adopt regular buy-ups, fostering long-term trust</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Japanese Transplant Manager, South Asia</h3>
-            <div class="company">BASF India</div>
-            <div class="period">February 2011 - June 2023 (12+ years)</div>
-            <ul>
-                <li>Spearheaded Japanese Transplant business growth across South Asia</li>
-                <li>Fostered international partnerships and collaborations through business development</li>
-                <li>Successfully bridged cultural divides to establish thriving partnerships</li>
-                <li>Managed technology transfer and strategic alliances across borders</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Independent Consultant</h3>
-            <div class="company">Asian Development Bank (ADB)</div>
-            <div class="period">February 2023 - June 2024</div>
-            <ul>
-                <li>Registration Number: 221955</li>
-                <li>Provided strategic advisory services on development projects</li>
-                <li>Conducted market analysis and feasibility studies</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Sales Manager - 3M Ambassador for Quality, Cost & Value</h3>
-            <div class="company">3M India</div>
-            <div class="period">March 2010 - January 2011</div>
-            <ul>
-                <li>Regional Business Development Leader for North & East Region</li>
-                <li>Specialized in Specialty Chemicals, Fluoropolymers, and Glass Beads</li>
-                <li>Drove sales growth in Auto and Electronics industries</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Co-Founder & Product Architect</h3>
-            <div class="company">Jasun Solutions - PartyCross.com</div>
-            <div class="period">August 2009 - December 2010</div>
-            <ul>
-                <li>Co-founded and architected PartyCross.com digital platform</li>
-                <li>Led business requirement gathering and user journey design</li>
-                <li>Managed early-stage product roadmap and MVP development</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Strategy Advisor</h3>
-            <div class="company">Daedals Software Labs Pvt. Ltd.</div>
-            <div class="period">August 2009 - December 2010</div>
-            <ul>
-                <li>Advised on new project ideas and government proposals</li>
-                <li>Supported business planning and technology integration</li>
-                <li>Contributed to positioning company for growth in government and private sector</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Business Development Leader</h3>
-            <div class="company">DSM Engineering Plastics</div>
-            <div class="period">August 2007 - February 2010</div>
-            <ul>
-                <li>Drove business growth for Engineering Plastics in Automotive, Electrical & Electronics</li>
-                <li>Focused on new applications and metal-to-plastic conversion opportunities</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>Global Operations Leadership Development (GOLD) Associate</h3>
-            <div class="company">Avery Dennison</div>
-            <div class="period">June 2006 - August 2007</div>
-            <ul>
-                <li>Completed prestigious GOLD program (Top 20 global leadership initiatives)</li>
-                <li>Gained expertise in R&D, production, inventory management, 5S, EHS, and plant operations</li>
-            </ul>
-        </div>
-
-        <div class="job-entry">
-            <h3>LIC India + PCO Business Owner</h3>
-            <div class="company">Self-Employed</div>
-            <div class="period">2000 - 2005</div>
-            <ul>
-                <li>Worked at LIC India while running Public Call Office (PCO) business</li>
-                <li>Financed education through entrepreneurial venture</li>
-                <li>Developed resilience and business acumen</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="cv-section">
-        <h2>Education</h2>
-        <ul>
-            <li><strong>MBA</strong> - IIT Kanpur (2006-2008)</li>
-            <li><strong>MBA</strong> - Indira Gandhi National Open University (2024)</li>
-            <li><strong>LLB (Bachelor of Laws)</strong> - University of Delhi (2012-2015)</li>
-            <li><strong>B.E. (Engineering & Technology)</strong> - Delhi College of Engineering (2002-2006)</li>
-            <li><strong>Medicines, Healthcare, Pharmacy</strong> - Surajmal Institute Delhi (2000-2002)</li>
-        </ul>
-    </div>
-
-    <div class="cv-section">
-        <h2>Professional Certifications</h2>
-        <ul>
-            <li>Fellowship (F.I.E.) C.Eng. (I) - Government Approved Valuer</li>
-            <li>Data Science Analytics</li>
-            <li>Copilot AI Driven Data Analysis</li>
-            <li>Microsoft Azure AI Essentials Professional Certificate</li>
-            <li>Adding Value through Diversity</li>
-        </ul>
-    </div>
-
-    <div class="cv-section">
-        <h2>Innovation Track Record - "Ideas Before Time"</h2>
-        <p>Documented ability to predict technological trends 4-15 years before mainstream adoption:</p>
-        <ul>
-            <li><strong>Silent DJ (2001)</strong> - Wireless headphone parties, 4-9 years ahead</li>
-            <li><strong>TV Program Storage (2002)</strong> - DVR/streaming concept</li>
-            <li><strong>Music Ringtones (2003)</strong> - Parallel to Nokia's launch</li>
-            <li><strong>Dual SIM (2003)</strong> - Now standard in billions of phones</li>
-            <li><strong>Universal Health ID (2009)</strong> - Same year as US HITECH Act</li>
-            <li><strong>3D/4D Virtual Imaging (2009)</strong> - VR/AR prediction</li>
-            <li><strong>Digital Money (2012-2013)</strong> - Cashless economy vision</li>
-            <li><strong>Moveable Road Dividers (2012)</strong> - Dynamic infrastructure</li>
-            <li><strong>Dashboard Simplification (2017)</strong> - BI revolution</li>
-        </ul>
-    </div>
-
-    <div class="cv-section">
-        <h2>Key Achievements</h2>
-        <ul>
-            <li>Compressed sales cycles by 30-90%, unlocking ₹X00 Cr+ incremental revenue</li>
-            <li>Scaled greenfield ventures to 25%+ CAGR via targeted customer-hunting excellence</li>
-            <li>Introduced ESG frameworks—cut VOC emissions 10% and optimized waste management</li>
-            <li>Built and coached double-digit member cross-functional teams across SCM, Finance & Marketing</li>
-            <li>Successfully managed Japanese Transplant business for 12+ years across South Asia</li>
-            <li>Predicted 9 major technological innovations 4-15 years before mainstream adoption</li>
-        </ul>
-    </div>
-
-    <div class="cv-section">
-        <h2>Personal Information</h2>
-        <p><strong>Diversity & Inclusion:</strong> Born with Muscular Dystrophy (40% disability). Overcame physical challenges to achieve professional excellence, demonstrating resilience, adaptability, and determination.</p>
-        <p><strong>Work Eligibility:</strong> USA, Canada, Singapore, Germany, Australia</p>
-        <p><strong>Languages:</strong> English, Hindi</p>
-    </div>
-
-    <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #e0e0e0;">
-        <p style="color: #888; font-size: 14px;">This CV is confidential and intended for the recipient only.</p>
-        <p style="color: #888; font-size: 14px; margin-top: 10px;">For more information, visit: <a href="https://ideas-before-time.pages.dev" style="color: #667eea;">ideas-before-time.pages.dev</a></p>
-        <p style="color: #888; font-size: 13px; margin-top: 15px;">
-            <a href="disclaimer.html" style="color: #667eea; text-decoration: none;">Terms & Disclaimer</a> | 
-            <a href="mailto:onestepforthelife@gmail.com" style="color: #667eea; text-decoration: none;">Feedback</a>
-        </p>
-    </div>
-</div>
-
-<script>
-// Password protection
-const CV_PASSWORD = "amitCVmyteammyman"; // Change this to your desired password
-
-document.getElementById('passwordForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const password = document.getElementById('passwordInput').value;
-    const errorMsg = document.getElementById('errorMsg');
-    
-    if (password === CV_PASSWORD) {
-        // Store in session
-        sessionStorage.setItem('cvAccess', 'true');
-        // Show CV
-        document.getElementById('passwordScreen').style.display = 'none';
-        document.getElementById('cvContent').style.display = 'block';
-    } else {
-        errorMsg.style.display = 'block';
-        document.getElementById('passwordInput').value = '';
-    }
-});
-
-// Check if already authenticated
-if (sessionStorage.getItem('cvAccess') === 'true') {
-    document.getElementById('passwordScreen').style.display = 'none';
-    document.getElementById('cvContent').style.display = 'block';
-}
-
-function logout() {
-    sessionStorage.removeItem('cvAccess');
-    location.reload();
-}
-</script>
-
+    <script>
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

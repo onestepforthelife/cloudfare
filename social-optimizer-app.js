@@ -339,109 +339,100 @@ function copyToClipboard(text) {
 // Customer pays → Profile unlocks instantly → No waiting!
 
 function processPayment() {
-    // STEP 1: Replace with your Razorpay key from https://dashboard.razorpay.com/app/keys
-    const RAZORPAY_KEY = 'rzp_test_DEMO_KEY'; // ⚠️ CHANGE THIS TO YOUR KEY!
+    // STEP 1: Replace with your Stripe Publishable Key from https://dashboard.stripe.com/apikeys
+    const STRIPE_KEY = 'pk_test_DEMO_KEY'; // ⚠️ CHANGE THIS TO YOUR KEY!
     
-    // For testing without Razorpay account, use demo mode
-    if (RAZORPAY_KEY === 'rzp_test_DEMO_KEY') {
-        alert('⚡ DEMO MODE\n\nThis will simulate instant payment.\n\nIn production:\n1. Sign up at razorpay.com\n2. Get your API key\n3. Replace RAZORPAY_KEY in code\n\nProfile will unlock automatically after real payment!');
+    // For testing without Stripe account, use demo mode
+    if (STRIPE_KEY === 'pk_test_DEMO_KEY') {
+        alert('⚡ DEMO MODE\n\nThis will simulate instant payment.\n\nIn production:\n1. Sign up at stripe.com (FREE)\n2. Get your Publishable Key\n3. Replace STRIPE_KEY in code\n\nStripe = Global trust + Lower fees!\nUsed by Amazon, Google, Shopify');
         simulatePayment();
         return;
     }
     
-    // STEP 2: Check if Razorpay is loaded
-    if (typeof Razorpay === 'undefined') {
-        alert('⚠️ Payment gateway not loaded.\n\nMake sure Razorpay script is included in HTML.\n\nUsing demo mode for now...');
+    // STEP 2: Check if Stripe is loaded
+    if (typeof Stripe === 'undefined') {
+        alert('⚠️ Payment gateway not loaded.\n\nMake sure Stripe script is included in HTML.\n\nUsing demo mode for now...');
         simulatePayment();
         return;
     }
     
     // STEP 3: Get user's currency and pricing
     const pricing = window.currentPricing || window.CurrencyDetector.getCurrentPricing();
-    const amount = window.CurrencyDetector.getRazorpayAmount(pricing);
     const displayPrice = window.CurrencyDetector.formatPrice(pricing);
     
-    console.log('Processing payment:', pricing.currency, displayPrice, 'Amount:', amount);
+    console.log('Processing payment:', pricing.currency, displayPrice);
     
-    // STEP 4: Configure Razorpay with automatic unlock
-    const options = {
-        key: RAZORPAY_KEY,
-        amount: amount, // Automatically calculated based on user's country
-        currency: pricing.currency, // INR, USD, EUR, GBP, etc.
-        name: 'Social Profile Optimizer AI',
-        description: `AI-Powered Profile Optimization - ${displayPrice}`,
-        image: 'https://via.placeholder.com/150', // Optional: Add your logo URL
-        
-        // ✅ AUTOMATIC UNLOCK - This runs immediately after successful payment
-        handler: function(response) {
-            // Payment successful! Auto-unlock starts now
-            console.log('✅ Payment Success!');
-            console.log('Payment ID:', response.razorpay_payment_id);
-            console.log('Order ID:', response.razorpay_order_id);
-            console.log('Signature:', response.razorpay_signature);
-            
-            // Show processing message
-            showProcessingMessage();
-            
-            // INSTANT UNLOCK - No manual confirmation needed!
-            setTimeout(() => {
-                isPaid = true;
-                showSuccess();
-                
-                // Log payment for records
-                logPayment(response.razorpay_payment_id);
-                
-                // Optional: Send confirmation email to admin
-                notifyAdmin(response.razorpay_payment_id);
-            }, 1000); // 1 second delay for smooth UX
-        },
-        
-        // Pre-fill customer details (optional)
-        prefill: {
-            name: '',
-            email: '',
-            contact: ''
-        },
-        
-        // Store transaction metadata
-        notes: {
-            platform: userData.platform,
-            persona: userData.persona,
-            tone: userData.tone,
-            goal: userData.goal,
-            timestamp: new Date().toISOString()
-        },
-        
-        // Branding
-        theme: {
-            color: '#667eea',
-            backdrop_color: 'rgba(0, 0, 0, 0.5)'
-        },
-        
-        // Handle payment cancellation
-        modal: {
-            ondismiss: function() {
-                console.log('Payment cancelled by user');
-                alert('💡 Payment cancelled.\n\nYour preview is still available.\nYou can complete payment anytime to unlock full access!');
+    // STEP 4: Initialize Stripe
+    const stripe = Stripe(STRIPE_KEY);
+    
+    // Show processing message
+    showProcessingMessage('Redirecting to secure payment...');
+    
+    // STEP 5: Create Stripe Checkout Session
+    // Note: In production, you'll need a backend endpoint to create the session
+    // For now, we'll use Stripe Payment Links (no backend needed!)
+    
+    // Option A: Use Stripe Payment Links (Easiest - No Backend!)
+    // 1. Create payment link in Stripe Dashboard
+    // 2. Replace URL below with your payment link
+    const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_XXXXXXXX'; // ⚠️ Replace with your link
+    
+    if (STRIPE_PAYMENT_LINK === 'https://buy.stripe.com/test_XXXXXXXX') {
+        // Demo mode - simulate payment
+        console.log('Demo mode: No payment link configured');
+        setTimeout(() => {
+            const overlay = document.getElementById('processingOverlay');
+            if (overlay) overlay.remove();
+            simulatePayment();
+        }, 1000);
+        return;
+    }
+    
+    // Store user data for after payment
+    sessionStorage.setItem('pendingOptimization', JSON.stringify({
+        userData: userData,
+        generatedProfile: generatedProfile,
+        timestamp: Date.now()
+    }));
+    
+    // Redirect to Stripe Payment Link
+    window.location.href = STRIPE_PAYMENT_LINK + '?client_reference_id=' + Date.now();
+    
+    // Option B: Use Stripe Checkout with Backend (Advanced)
+    // Uncomment this if you have a backend server:
+    /*
+    fetch('YOUR_BACKEND_URL/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            amount: pricing.amount,
+            currency: pricing.currency,
+            metadata: {
+                platform: userData.platform,
+                persona: userData.persona,
+                tone: userData.tone,
+                goal: userData.goal
             }
+        })
+    })
+    .then(res => res.json())
+    .then(session => {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(result => {
+        if (result.error) {
+            alert('❌ Payment Error\n\n' + result.error.message);
         }
-    };
-    
-    // STEP 4: Open Razorpay payment modal
-    const rzp = new Razorpay(options);
-    
-    // Handle payment errors
-    rzp.on('payment.failed', function(response) {
-        console.error('Payment failed:', response.error);
-        alert('❌ Payment Failed\n\n' + response.error.description + '\n\nPlease try again or contact support: onestepforthelife@gmail.com');
+    })
+    .catch(error => {
+        console.error('Payment error:', error);
+        alert('❌ Payment Failed\n\nPlease try again or contact support: onestepforthelife@gmail.com');
     });
-    
-    // Open payment window
-    rzp.open();
+    */
 }
 
 // Show processing message during unlock
-function showProcessingMessage() {
+function showProcessingMessage(message = 'Unlocking your optimized profile...') {
     const overlay = document.createElement('div');
     overlay.id = 'processingOverlay';
     overlay.style.cssText = `
@@ -464,7 +455,7 @@ function showProcessingMessage() {
         <div>
             <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
             <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">Payment Successful!</div>
-            <div style="font-size: 1em; opacity: 0.9;">Unlocking your optimized profile...</div>
+            <div style="font-size: 1em; opacity: 0.9;">${message}</div>
         </div>
     `;
     document.body.appendChild(overlay);
