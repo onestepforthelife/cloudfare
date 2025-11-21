@@ -369,6 +369,23 @@ document.getElementById("backToTop").onclick = function(e) {
     e.preventDefault();
     window.scrollTo({top: 0, behavior: 'smooth'});
 };
+
+// Password protection for Market Research
+(function() {
+    const RESEARCH_PASSWORD = 'AmitResearch2025!';
+    const isAuthenticated = sessionStorage.getItem('research_authenticated') === 'true';
+    
+    if (!isAuthenticated) {
+        const enteredPassword = prompt('This market research report is password protected.\n\nPlease enter the password to view:');
+        
+        if (enteredPassword === RESEARCH_PASSWORD) {
+            sessionStorage.setItem('research_authenticated', 'true');
+        } else {
+            alert('Incorrect password. Redirecting to home page.');
+            window.location.href = 'index.html';
+        }
+    }
+})();
 </script>
 
 </body>

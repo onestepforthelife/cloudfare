@@ -36,7 +36,7 @@ const PaymentGateway = {
     // Show payment options to user
     showPaymentOptions() {
         const gateways = this.detectBestGateway();
-        const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 11, currency: 'INR', symbol: '₹' };
+        const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 21, currency: 'INR', symbol: '₹' };
         
         let html = '<div style="max-width: 500px; margin: 0 auto;">';
         html += '<h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">Choose Payment Method</h3>';
@@ -144,7 +144,7 @@ const PaymentGateway = {
 
     // UPI Payment (Direct - 0% fees!)
     processUPI() {
-        const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 11, currency: 'INR' };
+        const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 21, currency: 'INR' };
         const upiConfig = this.config.upi;
         
         if (upiConfig.upiId === 'yourname@paytm') {
@@ -276,7 +276,7 @@ const PaymentGateway = {
             return;
         }
         
-        const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 11, currency: 'INR' };
+        const pricing = window.CurrencyDetector?.getCurrentPricing() || { amount: 21, currency: 'INR' };
         const amount = pricing.currency === 'INR' ? pricing.amount * 100 : pricing.amount * 100; // Convert to paise/cents
         
         const options = {

@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amit Kumar - Professional CV</title>
+    <meta name="description" content="Professional CV and resume of Amit Kumar Agrawal - Innovation strategist, technology leader, and business transformation expert">
+    <meta name="author" content="Amit Kumar Agrawal">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Amit Kumar - Professional CV">
+    <meta property="og:url" content="https://ideas-before-time.pages.dev/cv.html">
+    <link rel="canonical" href="https://ideas-before-time.pages.dev/cv.html">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -269,7 +275,7 @@
 
     <div class="container">
         <div class="header">
-            <img src="Amit DP.jpg" alt="Amit Kumar" class="profile-photo">
+            <img src="images/CV Image.png" alt="Amit Kumar" class="profile-photo">
             <div>
                 <h1>AMIT KUMAR</h1>
                 <div class="title">Board-Ready Transformation Architect | Governance & DEI Steward | APAC Institutional Advisor</div>
@@ -464,6 +470,26 @@
     </div>
 
     <button class="print-button" onclick="window.print()">🖨️ Print / Save PDF</button>
+
+<script>
+// Password protection for CV
+(function() {
+    const CV_PASSWORD = 'AmitCV2025!';
+    const isAuthenticated = sessionStorage.getItem('cv_authenticated') === 'true';
+    
+    if (!isAuthenticated) {
+        const enteredPassword = prompt('This CV is password protected.\n\nPlease enter the password to view:');
+        
+        if (enteredPassword === CV_PASSWORD) {
+            sessionStorage.setItem('cv_authenticated', 'true');
+        } else {
+            alert('Incorrect password. Redirecting to home page.');
+            window.location.href = 'index.html';
+        }
+    }
+})();
+</script>
+
 <!-- Google Analytics 4 - Universal Tracking -->
 <script src="universal-analytics.js"></script>
 

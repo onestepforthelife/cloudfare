@@ -99,14 +99,14 @@ function updatePricesOnPage(pricing) {
     priceTexts.forEach(el => {
         const originalText = el.getAttribute('data-original-text') || el.textContent;
         el.setAttribute('data-original-text', originalText);
-        el.textContent = originalText.replace(/₹11|₹\s*11|\$1|\$\s*1/g, `${pricing.symbol}${pricing.amount}`);
+        el.textContent = originalText.replace(/₹21|₹\s*21|\$1|\$\s*1/g, `${pricing.symbol}${pricing.amount}`);
     });
     
     // Update button text
     const buttons = document.querySelectorAll('button[data-payment-button]');
     buttons.forEach(btn => {
         if (btn.textContent.includes('₹') || btn.textContent.includes('$')) {
-            btn.textContent = btn.textContent.replace(/₹11|₹\s*11|\$1|\$\s*1/g, `${pricing.symbol}${pricing.amount}`);
+            btn.textContent = btn.textContent.replace(/₹21|₹\s*21|\$1|\$\s*1/g, `${pricing.symbol}${pricing.amount}`);
         }
     });
     
