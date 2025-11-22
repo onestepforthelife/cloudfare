@@ -36,14 +36,17 @@ Library: /library.html
 - cv.html (Password protected)
 - library.html (Innovation library - public)
 
-✅ RECENT UPDATES
-=================
-- Removed BASF branding from marketing
-- Updated to "Social Profile" (all platforms)
-- Added 8 new professional categories
-- Fixed before/after labels
-- Updated trust badges
-- Access code system implemented
+✅ RECENT UPDATES (Nov 23, 2025)
+================================
+- ✅ Removed ALL BASF branding from marketing (replaced with "Fortune 500")
+- ✅ Updated to "Social Profile" (all platforms)
+- ✅ Removed ALL money-back guarantee references
+- ✅ Added disclaimer to SPO results about automated solution
+- ✅ Fixed back button visibility (white color, 18px font)
+- ✅ Updated access codes (CORP2025 instead of BASF2025)
+- ✅ Added 8 new professional categories
+- ✅ Fixed before/after labels
+- ✅ Updated trust badges
 
 🚀 DEPLOYMENT
 =============
